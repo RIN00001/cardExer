@@ -214,7 +214,7 @@ Column(
         contentDescription = game.name,
         modifier = Modifier
             .fillMaxWidth()
-            .height(200.dp)
+            .height(150.dp)
             .clip(RoundedCornerShape(8.dp))
     )
     Spacer(Modifier.height(4.dp))
@@ -237,19 +237,22 @@ Column(
                 .padding(start = 4.dp)
         )
     }
-    Row {
+    Row(
+        horizontalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+        .fillMaxWidth(),
+        ) {
         Icon(
             imageVector = Icons.Default.Star,
             contentDescription = "Rating",
             tint = Color(0xFFFFD700),
             modifier = Modifier.size(14.dp)
         )
-        Spacer(Modifier.width(2.dp))
         Text(
             text = game.rating.toString(),
             fontSize = 12.sp
         )
-        Spacer(Modifier.width(4.dp))
+        Spacer(Modifier.width(75.dp))
         Text(
             if (game.isFree)"FREE" else "PAID",
             color = if (game.isFree) Color(0xFF0BE077) else Color.Red,
@@ -262,11 +265,17 @@ Column(
 
 @Composable
 fun GameCardDisplay(title: String, games: List<GameModel>){
-    Column(modifier = Modifier.fillMaxWidth()) {
+    Column(modifier = Modifier.fillMaxWidth()
+        .shadow(
+            elevation = 2.dp,
+            shape = RoundedCornerShape(4.dp),
+            clip = true
+        )
+    ) {
 
         Row(modifier = Modifier
             .fillMaxWidth()
-            .padding(horizontal = 16.dp, vertical = 25.dp)
+            .padding(horizontal = 16.dp, vertical = 12.dp)
             , horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Text(title, fontWeight = FontWeight.Bold)
