@@ -2,7 +2,7 @@ package com.example.cardexer.Soal1
 data class GameModel(
     val name: String,
     val rating: Double,
-    val isRecommended: Boolean,
+    val isFree: Boolean,
     val imageId: String
 )
 
