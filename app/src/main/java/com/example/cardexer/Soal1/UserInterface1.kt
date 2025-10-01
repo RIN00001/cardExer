@@ -1,5 +1,4 @@
 package com.example.cardexer.Soal1
-
 import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -49,9 +48,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.material.icons.filled.MoreVert
 
 
@@ -199,7 +196,7 @@ fun GenreDisplay(genres: List<String>){
 
 
 @Composable
-fun GameCard(game: GameModel){
+fun GameCard(game: modules){
     val context = LocalContext.current
     val imageRes = remember(game.imageId) {
         context.resources.getIdentifier(game.imageId,"drawable",context.packageName)
@@ -214,7 +211,7 @@ Column(
         contentDescription = game.name,
         modifier = Modifier
             .fillMaxWidth()
-            .height(150.dp)
+            .height(120.dp)
             .clip(RoundedCornerShape(8.dp))
     )
     Spacer(Modifier.height(4.dp))
@@ -264,10 +261,10 @@ Column(
 }
 
 @Composable
-fun GameCardDisplay(title: String, games: List<GameModel>){
+fun GameCardDisplay(title: String, games: List<modules>){
     Column(modifier = Modifier.fillMaxWidth()
         .shadow(
-            elevation = 2.dp,
+            elevation = 1.dp,
             shape = RoundedCornerShape(4.dp),
             clip = true
         )
