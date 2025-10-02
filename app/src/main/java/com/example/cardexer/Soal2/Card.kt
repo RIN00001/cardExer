@@ -41,8 +41,8 @@ fun cardPreview(){
     ContentBarCard(
         title = "Daily Thought",
         desc = "MEDITATION • 3-10 MIN",
-        backgroundColor = Color(0xFF3C3C50), // dark gradient-ish
-        onClick = { /* TODO: play meditation */ }
+        backgroundColor = Color(0xFF3C3C50),
+        onClick = { }
     )
 }
 @Composable
