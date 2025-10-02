@@ -27,7 +27,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -57,7 +60,7 @@ val Poppins = FontFamily(
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun Soal2Preview(){
-    val genres = listOf("All", "Favorite", "Sleep", "Anxious", "Sleep", "Music")
+    val genres = listOf("All", "Favorite", "Sleep", "Anxious", "Trauma", "Music")
     val datasource = ModuleDataSource()
     Scaffold( ) { innerPadding ->
         LazyColumn(
@@ -188,30 +191,40 @@ fun GameCardDisplay(title: String, modules: List<Module>){
         }
     }
 }
-}@Composable
-fun ModuleGenreDis(genres: List<String>){
+}
+@Composable
+fun ModuleGenreDis(genres: List<String>) {
+    var selectedGenre by remember { mutableStateOf(genres.first()) }
+
     LazyRow(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 4.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
-        , contentPadding = PaddingValues(horizontal = 5.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
+        contentPadding = PaddingValues(horizontal = 5.dp)
     ) {
         items(genres) { genre ->
+            val isSelected = genre == selectedGenre
             Box(
                 modifier = Modifier
-                    .width(100.dp)
-                    .height(30.dp)
-                    .background(Color(0xFF129E59),RoundedCornerShape(60))
-                    .clickable{/* TODO: nanti*/}
-                , contentAlignment = Alignment.Center
+                    .height(36.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(
+                        if (isSelected) Color.Black else Color.Transparent
+                    )
+                    .clickable { selectedGenre = genre }
+                    .padding(horizontal = 16.dp),
+                contentAlignment = Alignment.Center
             ) {
                 Text(
                     text = genre,
-                    color = Color(0xFFFFFFFF),
-                    fontWeight = FontWeight.Bold,
+                    fontFamily = Poppins,
+                    fontWeight = if (isSelected) FontWeight.Bold else FontWeight.Normal,
+                    color = if (isSelected) Color.White else Color.Gray,
+                    fontSize = 14.sp
                 )
             }
         }
     }
 }
+
