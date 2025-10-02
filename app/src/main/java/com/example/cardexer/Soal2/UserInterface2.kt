@@ -15,15 +15,13 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Star
-import androidx.compose.material3.Icon
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -40,13 +38,11 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.cardexer.Soal1.GameCard
-import com.example.cardexer.Soal1.modules
-import com.example.cardexer.Soal1.GenreDisplay
 
 val Poppins = FontFamily(
     Font(R.font.poppins_regular, FontWeight.Normal),
@@ -59,115 +55,172 @@ val Poppins = FontFamily(
 
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
-fun Soal2Preview(){
+fun Soal2Preview() {
     val genres = listOf("All", "Favorite", "Sleep", "Anxious", "Trauma", "Music")
     val datasource = ModuleDataSource()
-    Scaffold( ) { innerPadding ->
+
+    Scaffold { innerPadding ->
         LazyColumn(
             modifier = Modifier
                 .padding(innerPadding)
                 .fillMaxSize()
-
-                .background(Color(0xFFF6F6F6))
+                .background(Color(0xFFF6F6F6)),
+            verticalArrangement = Arrangement.spacedBy(16.dp) // space between sections
         ) {
             item {
                 Spacer(Modifier.height(100.dp))
                 Text(
-                    text = "Good Morning, Jennie",
+                    text = "Good Morning, Jennie!",
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Bold,
                     fontSize = 24.sp,
                     modifier = Modifier.padding(horizontal = 16.dp)
                 )
-                Spacer(Modifier.height(8.dp))
-
+                Spacer(Modifier.height(4.dp))
                 Text(
-                    text = "Recommended for you",
+                    text = "We wish you have a good day",
                     fontFamily = Poppins,
                     fontWeight = FontWeight.Light,
-                    fontSize = 20.sp,
-                    modifier = Modifier.padding(horizontal = 16.dp)
+                    fontSize = 16.sp,
+                    modifier = Modifier.padding(horizontal = 16.dp),
+                    color = Color.Gray
                 )
-                Spacer(Modifier.height(16.dp))
+            }
+
+            item {
                 ModuleGenreDis(genres)
-                Spacer(Modifier.height(8.dp))
+            }
+
+            item {
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp),
+                    horizontalArrangement = Arrangement.spacedBy(12.dp)
+                ) {
+                    ColoredCardDisplay(
+                        title = "Basics",
+                        genre = "Course",
+                        duration = "3–10 MIN",
+                        backgroundColor = Color(0xFF8E9BFF),
+                        imageResId = R.drawable.heart_face
+                    )
+                    ColoredCardDisplay(
+                        title = "Relaxation",
+                        genre = "Music",
+                        duration = "3–10 MIN",
+                        backgroundColor = Color(0xFFFFC966),
+                        imageResId = R.drawable.reading_a_book
+                    )
+                }
+            }
+
+            item {
+                ContentBarCard(
+                    title = "Daily Thought",
+                    desc = "MEDITATION • 3–10 MIN",
+                    backgroundColor = Color(0xFF3C3C50),
+                    onClick = {  }
+                )
+            }
+
+            item {
+                ModuleCardDisplay(
+                    title = "Recommended for you",
+                    modules = datasource.loadCourses()
+                )
+            }
+        }
+    }
+}
+
+
+
+    @Composable
+    fun ModuleCard(module: Module) {
+        Card(
+            modifier = Modifier
+                .width(210.dp)
+                .padding(8.dp),
+            shape = RoundedCornerShape(16.dp)
+            , colors = CardDefaults.cardColors(
+                containerColor = Color(0xFFF6F6F6)
+            )
+        ) {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(8.dp),
+                horizontalAlignment = Alignment.Start
+            ) {
+                val context = LocalContext.current
+                val imageRes = remember(module.imageUrl) {
+                    context.resources.getIdentifier(module.imageUrl, "drawable", context.packageName)
+                }
+                Box(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(160.dp)
+                        .clip(RoundedCornerShape(16.dp))
+                        .background(Color(0xFFE3E2E9)),
+                    contentAlignment = Alignment.Center
+                ){
+                    if (imageRes != 0) {
+                        Image(
+                            painter = painterResource(id = imageRes),
+                            contentDescription = module.title,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .height(140.dp)
+                                .clip(RoundedCornerShape(12.dp))
+                        )
+                    }
+                }
+
+                Spacer(Modifier.height(6.dp))
+
+                Text(
+                    text = module.title,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 14.sp,
+                    color = Color.Black
+
+                )
+
+                Spacer(Modifier.height(2.dp))
+                Row(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(horizontal = 12.dp, vertical = 4.dp),
+                    horizontalArrangement = Arrangement.SpaceBetween,
+                    verticalAlignment = Alignment.CenterVertically
+                ) {
+                    Text(
+                        text = module.genre,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Light,
+                        fontSize = 12.sp,
+                        color = Color.Gray
+                    )
+                    Text(
+                        text = module.duration,
+                        fontFamily = Poppins,
+                        fontWeight = FontWeight.Normal,
+                        fontSize = 12.sp,
+                        color = Color.Black
+                    )
+                }
             }
         }
     }
 
 
-@Composable
-fun CourseCard(x0: Module) {
-    TODO("Not yet implemented")
-}
 
 
 @Composable
-fun MedititationBottom() {
-
-}
-
-@Composable
-fun GameCard(module: Module){
-    val context = LocalContext.current
-    val imageRes = remember(module.imageUrl) {
-        context.resources.getIdentifier(module.imageUrl,"drawable",context.packageName)
-    }
-    Column(
-        modifier = Modifier
-            .width(160.dp)
-            .padding(8.dp)
-    ) {
-        Image(
-            painter = painterResource(id = imageRes),
-            contentDescription = module.title,
-            modifier = Modifier
-                .fillMaxWidth()
-                .height(120.dp)
-                .clip(RoundedCornerShape(8.dp))
-        )
-        Spacer(Modifier.height(4.dp))
-            Text(
-                text = module.title,
-                fontSize = 18.sp,
-                fontWeight = FontWeight.Bold,
-                maxLines = 2
-            )
-        Row(
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier
-                .fillMaxWidth(),
-        ) {
-            Icon(
-                imageVector = Icons.Default.Star,
-                contentDescription = "Rating",
-                tint = Color(0xFFFFD700),
-                modifier = Modifier.size(14.dp)
-            )
-            Text(
-                text = module.genre.toString(),
-                fontSize = 12.sp
-            )
-            Spacer(Modifier.width(75.dp))
-            Text(
-                text = module.duration.toString(),
-                fontSize = 12.sp,
-                fontWeight = FontWeight.Bold
-            )
-        }
-    }
-}
-
-
-
-@Composable
-fun GameCardDisplay(title: String, modules: List<Module>){
+fun ModuleCardDisplay(title: String, modules: List<Module>){
     Column(modifier = Modifier.fillMaxWidth()
-        .shadow(
-            elevation = 2.dp,
-            shape = RoundedCornerShape(4.dp),
-            clip = true
-        )
     ) {
 
         Row(modifier = Modifier
@@ -175,8 +228,7 @@ fun GameCardDisplay(title: String, modules: List<Module>){
             .padding(horizontal = 16.dp, vertical = 12.dp)
             , horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(title, fontWeight = FontWeight.Bold)
-            Text("More", color = Color(0xFF129E59), fontWeight = FontWeight.Bold)
+            Text(title, fontWeight = FontWeight.Bold, fontSize = 26.sp, fontFamily = Poppins)
         }
         LazyRow(
             modifier = Modifier
@@ -185,13 +237,16 @@ fun GameCardDisplay(title: String, modules: List<Module>){
             horizontalArrangement = Arrangement.spacedBy(8.dp)
             , contentPadding = PaddingValues(horizontal = 12.dp)
         ) {
-            items(modules) { game ->
-                GameCard(game)
+            items(modules) { module ->
+                ModuleCard(module)
             }
         }
     }
 }
-}
+
+
+
+//Copas dari Soal1 terus aku pake items biar bisa bedain isSelected
 @Composable
 fun ModuleGenreDis(genres: List<String>) {
     var selectedGenre by remember { mutableStateOf(genres.first()) }

@@ -3,6 +3,7 @@ package com.example.cardexer.Soal2
 import com.example.cardexer.R
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -15,7 +16,10 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.PlayArrow
 import androidx.compose.material3.Card
+import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -28,25 +32,18 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 
+
+//testing ground
 @Preview(showBackground = true, showSystemUi = false)
 @Composable
 fun cardPreview(){
-    Row {
-        ColoredCardDisplay(
-            title = "Basics",
-            genre = "Course",
-            duration = "3-10 MIN",
-            backgroundColor = Color(0xFF8E9BFF), // purple
-            imageResId = R.drawable.heart_face
-        )
-        ColoredCardDisplay(
-            title = "Relaxation",
-            genre = "Music",
-            duration = "3-10 MIN",
-            backgroundColor = Color(0xFFFFC966),
-            imageResId = R.drawable.reading_a_book
-        )
-    }
+
+    ContentBarCard(
+        title = "Daily Thought",
+        desc = "MEDITATION • 3-10 MIN",
+        backgroundColor = Color(0xFF3C3C50), // dark gradient-ish
+        onClick = { /* TODO: play meditation */ }
+    )
 }
 @Composable
 fun ColoredCardDisplay(
@@ -132,3 +129,61 @@ fun ColoredCardDisplay(
     }
 }
 
+@Composable
+fun ContentBarCard(
+    title: String,
+    desc: String,
+    backgroundColor: Color,
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        modifier = modifier
+            .padding(horizontal = 16.dp, vertical = 8.dp)
+            .fillMaxWidth()
+            .height(90.dp)
+            .clickable{ onClick() } ,
+        shape = RoundedCornerShape(16.dp)
+    ) {
+        Row(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(backgroundColor)
+                .padding(horizontal = 16.dp)
+            , horizontalArrangement = Arrangement.SpaceBetween
+            , verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column {
+                Text(
+                    text = title,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 18.sp,
+                    color = Color.White
+                )
+                Spacer(Modifier.height(4.dp))
+                Text(
+                    text = desc,
+                    fontFamily = Poppins,
+                    fontWeight = FontWeight.Light,
+                    fontSize = 14.sp,
+                    color =  Color.White.copy(alpha = 0.9f)
+                )
+            }
+            Box(
+                modifier = Modifier
+                    .size(40.dp)
+                    .clip(RoundedCornerShape(50))
+                    .background(Color.White),
+                contentAlignment = Alignment.Center
+            ){
+                Icon(
+                    imageVector = Icons.Default.PlayArrow,
+                    contentDescription = "Play",
+                    tint = Color.Black,
+                    modifier = Modifier.size(20.dp)
+                )
+            }
+        }
+    }
+}
