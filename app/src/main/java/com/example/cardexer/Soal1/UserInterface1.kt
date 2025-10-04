@@ -67,8 +67,11 @@ fun Soal1Preview() {
                 .background(Color.White)
         ) {
             item { GenreDisplay(genres) }
+            item { Spacer(Modifier.height(8.dp)) }
             item { GameCardDisplay("Recommended for you", dataSource.loadRecommendedGames()) }
+            item { Spacer(Modifier.height(8.dp)) }
             item { GameCardDisplay("New Games & Apps", dataSource.loadNewGames()) }
+            item { Spacer(Modifier.height(8.dp)) }
             item { GameCardDisplay("Popular Games", dataSource.loadPopularGames()) }
         }
     }
@@ -264,7 +267,7 @@ Column(
 fun GameCardDisplay(title: String, games: List<modules>){
     Column(modifier = Modifier.fillMaxWidth()
         .shadow(
-            elevation = 1.dp,
+            elevation = 2.dp,
             shape = RoundedCornerShape(4.dp),
             clip = true
         )
